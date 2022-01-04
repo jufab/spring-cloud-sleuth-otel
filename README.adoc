@@ -17,6 +17,23 @@ Spring Cloud Sleuth provides Spring Boot auto-configuration for OpenTelemetry ba
 Sleuth configures everything you need to get started.
 This includes where trace data (spans) are reported to, how many traces to keep (sampling), if remote fields (baggage) are sent, and which libraries are traced.
 
+=== Compatibility Matrix
+
+Please check the table below and pic the compatible versions for your project:
+
+[cols="1,1,1"]
+|===
+|Spring Boot |Spring Cloud |Spring Cloud Sleuth OTel
+
+|2.4.x, 2.5.x
+|2020.0.x aka Ilford
+|1.0.x
+
+|2.6.x
+|2021.0.x aka Jubilee
+|1.1.x
+|===
+
 === Quick Start
 
 Add Spring Cloud Sleuth to the classpath of a Spring Boot application (together with a Tracer implementation) and you will see trace IDs in logs.
@@ -123,7 +140,7 @@ NOTE: Set `spring.application.name=myService` (for instance) to see the service 
 
 == Documentation
 
-Please visit the https://docs.spring.io/spring-cloud-sleuth/docs/[Spring Cloud Sleuth documentation page] to read more about the Spring Cloud Sleuth project. You can check this project's https://spring-cloud-incubator.github.io/spring-cloud-sleuth-otel/docs/current/reference/html/[documentation here].
+Please visit the https://docs.spring.io/spring-cloud-sleuth/docs/[Spring Cloud Sleuth documentation page] to read more about the Spring Cloud Sleuth project. You can check this project's https://spring-projects-experimental.github.io/spring-cloud-sleuth-otel/docs/current/reference/html/[documentation here].
 
 == Building
 
@@ -153,23 +170,9 @@ the `.mvn` configuration, so if you find you have to do it to make a
 build succeed, please raise a ticket to get the settings added to
 source control.
 
-For hints on how to build the project look in `.travis.yml` if there
-is one. There should be a "script" and maybe "install" command. Also
-look at the "services" section to see if any services need to be
-running locally (e.g. mongo or rabbit).  Ignore the git-related bits
-that you might find in "before_install" since they're related to setting git
-credentials and you already have those.
+The projects that require middleware (i.e. Redis) for testing generally
+require that a local instance of [Docker](https://www.docker.com/get-started) is installed and running.
 
-The projects that require middleware generally include a
-`docker-compose.yml`, so consider using
-https://docs.docker.com/compose/[Docker Compose] to run the middeware servers
-in Docker containers. See the README in the
-https://github.com/spring-cloud-samples/scripts[scripts demo
-repository] for specific instructions about the common cases of mongo,
-rabbit and redis.
-
-NOTE: If all else fails, build with the command from `.travis.yml` (usually
-`./mvnw install`).
 
 === Documentation
 
@@ -415,7 +418,7 @@ Go to root project's `pom.xml` and update the properties to point to proper depe
 $ otelVersion="1.0.0-M8" && ./mvnw versions:set -DnewVersion="${otelVersion}" -DgenerateBackupPoms=false && pushd spring-cloud-sleuth-otel-dependencies && ../mvnw versions:set -DnewVersion="${otelVersion}" -DgenerateBackupPoms=false && popd && pushd benchmarks && ../mvnw versions:set -DnewVersion="${otelVersion}" -DgenerateBackupPoms=false && popd
 ```
 
-IMPORTANT: Notice that we have to update the `otel-dependencies` and `benchmarks` modules manually.
+IMPORTANT: Notice that we have to update some modules manually.
 
 === Build the project
 
@@ -434,20 +437,19 @@ $ ./mvnw clean install -Pcentral
 === Upload the artifacts
 
 ```bash
-$ ./mvnw deploy -Pmilestone
+$ ./mvnw deploy -Pmilestone -DskipTests
 ```
 
 or
 
 ```bash
-$ ./mvnw deploy -Pcentral
+$ ./mvnw deploy -Pcentral -DskipTests
 ```
 
 === Commit and tag
 
 ```bash
-$ ./mvnw versions:commit
-$ otelVersion="1.0.0-M8" && ./mvnw versions:set-scm-tag -DnewTag="${otelVersion}"
+$ otelVersion="1.0.0-M8" && git commit -am "Bumped versions for the ${otelVersion} release" && git tag "v${otelVersion}"
 ```
 
 === Generate and update the docs
@@ -461,12 +463,12 @@ $ temporaryDir="/tmp/sleuth-otel"  && rm -rf "${temporaryDir}" && mkdir -p "${te
 === Go back to snapshots
 
 ```bash
-$ otelVersion="1.0.0-SNAPSHOT" && ./mvnw versions:set -DnewVersion="${otelVersion}" -DgenerateBackupPoms=false && pushd spring-cloud-sleuth-otel-dependencies && ../mvnw versions:set -DnewVersion="${otelVersion}" -DgenerateBackupPoms=false && popd
+$ otelVersion="1.0.0-SNAPSHOT" && ./mvnw versions:set -DnewVersion="${otelVersion}" -DgenerateBackupPoms=false && pushd spring-cloud-sleuth-otel-dependencies && ../mvnw versions:set -DnewVersion="${otelVersion}" -DgenerateBackupPoms=false && popd && pushd benchmarks && ../mvnw versions:set -DnewVersion="${otelVersion}" -DgenerateBackupPoms=false && popd
 ```
 
 === Commit and push tags
 
 ```bash
-$ ./mvnw versions:commit
+$ git commit -am "Going back to snapshots after the release"
 $ git push origin --tags
 ```

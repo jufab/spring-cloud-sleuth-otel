@@ -142,7 +142,7 @@
 		</dependency>
 		<dependency>
 			<groupId>io.opentelemetry</groupId>
-			<artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
+			<artifactId>opentelemetry-sdk-extension-autoconfigure-spi</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>io.opentelemetry</groupId>
@@ -206,6 +206,16 @@
 					<artifactId>*</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry</groupId>
+			<artifactId>opentelemetry-exporter-otlp-common</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>io.opentelemetry.proto</groupId>
+			<artifactId>opentelemetry-proto</artifactId>
+			<optional>true</optional>
 		</dependency>
 
 		<!-- Zipkin -->

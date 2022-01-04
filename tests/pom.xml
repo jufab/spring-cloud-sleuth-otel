@@ -24,8 +24,8 @@
 
 	<artifactId>spring-cloud-sleuth-otel-tests-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>Spring Cloud Sleuth OTel Tests</name>
-	<description>Spring Cloud Sleuth OTel Tests</description>
+	<name>Spring Cloud Sleuth OTel Tests Parent</name>
+	<description>Spring Cloud Sleuth OTel Tests Parent</description>
 
 	<parent>
 		<groupId>org.springframework.cloud</groupId>
@@ -38,19 +38,5 @@
 		<module>common</module>
 		<module>otel</module>
 	</modules>
-
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<!--skip deploy (this is just a test module) -->
-					<artifactId>maven-deploy-plugin</artifactId>
-					<configuration>
-						<skip>true</skip>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
 
 </project>

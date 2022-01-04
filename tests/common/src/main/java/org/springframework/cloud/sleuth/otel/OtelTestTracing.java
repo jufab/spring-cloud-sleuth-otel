@@ -41,6 +41,8 @@ import org.springframework.cloud.sleuth.http.HttpRequestParser;
 import org.springframework.cloud.sleuth.http.HttpServerHandler;
 import org.springframework.cloud.sleuth.otel.bridge.ArrayListSpanProcessor;
 import org.springframework.cloud.sleuth.otel.bridge.OtelAccessor;
+import org.springframework.cloud.sleuth.otel.bridge.SpringHttpClientAttributesExtractor;
+import org.springframework.cloud.sleuth.otel.bridge.SpringHttpServerAttributesExtractor;
 import org.springframework.cloud.sleuth.propagation.Propagator;
 import org.springframework.cloud.sleuth.test.TestSpanHandler;
 import org.springframework.cloud.sleuth.test.TestTracingAssertions;
@@ -49,6 +51,12 @@ import org.springframework.cloud.sleuth.test.TestTracingAwareSupplier;
 import org.springframework.cloud.sleuth.test.TracerAware;
 import org.springframework.context.ApplicationEventPublisher;
 
+/**
+ * Class containing access to all tracing related components.
+ *
+ * @author Marcin Grzejszczak
+ * @since 1.0.0
+ */
 public class OtelTestTracing implements TracerAware, TestTracingAware, TestTracingAwareSupplier, Closeable {
 
 	private final DynamicSampler sampler = new DynamicSampler();
@@ -125,7 +133,8 @@ public class OtelTestTracing implements TracerAware, TestTracingAware, TestTraci
 
 	@Override
 	public HttpServerHandler httpServerHandler() {
-		return OtelAccessor.httpServerHandler(openTelemetry, null, null, () -> Pattern.compile(""));
+		return OtelAccessor.httpServerHandler(openTelemetry, null, null, () -> Pattern.compile(""),
+				new SpringHttpServerAttributesExtractor());
 	}
 
 	@Override
@@ -137,7 +146,7 @@ public class OtelTestTracing implements TracerAware, TestTracingAware, TestTraci
 	@Override
 	public HttpClientHandler httpClientHandler() {
 		return OtelAccessor.httpClientHandler(openTelemetry, this.clientRequestParser, null,
-				SamplerFunction.alwaysSample());
+				SamplerFunction.alwaysSample(), new SpringHttpClientAttributesExtractor());
 	}
 
 	ApplicationEventPublisher publisher() {

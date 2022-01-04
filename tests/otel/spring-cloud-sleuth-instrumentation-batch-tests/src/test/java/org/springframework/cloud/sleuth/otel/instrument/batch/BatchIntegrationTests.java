@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2020 the original author or authors.
+ * Copyright 2013-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.springframework.cloud.sleuth.otel.annotation;
+package org.springframework.cloud.sleuth.otel.instrument.batch;
 
 import io.opentelemetry.sdk.trace.samplers.Sampler;
 
@@ -26,9 +26,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
 
 @SpringBootTest
-@ContextConfiguration(classes = SleuthSpanCreatorCircularDependencyTests.Config.class)
-public class SleuthSpanCreatorCircularDependencyTests
-		extends org.springframework.cloud.sleuth.instrument.annotation.SleuthSpanCreatorCircularDependencyTests {
+@ContextConfiguration(classes = BatchIntegrationTests.Config.class)
+public class BatchIntegrationTests extends org.springframework.cloud.sleuth.instrument.batch.BatchIntegrationTests {
 
 	@Configuration(proxyBeanMethods = false)
 	static class Config {
